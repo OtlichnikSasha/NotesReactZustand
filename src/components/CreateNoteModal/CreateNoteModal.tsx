@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { Button } from '../UI/Button/Button';
 import { useNotesStore } from '@/store/notesStore';
 import { enqueueSnackbar } from 'notistack';
@@ -20,7 +20,8 @@ export const CreateNoteModal = () => {
   const addNote = useNotesStore((state) => state.addNote);
   const closeModal = useModalStore((state) => state.closeModal);
 
-  const handleCreateNote = (): void => {
+  const handleCreateNote = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
     addNote(noteForm);
     enqueueSnackbar('Заметка успешно создана', {
       variant: 'success',
@@ -53,13 +54,16 @@ export const CreateNoteModal = () => {
             setIsLoadingTinyEditor(false);
             return (tinyEditorRef.current = editor);
           }}
+          apiKey='uhism6wemykf6usdjyyz0gmfizgyzfedys7f7xnfwi5jkk3k'
           onChange={handleChangeEditor}
           initialValue=''
           init={init}
         />
       </div>
 
-      <Button disabled={!noteForm?.name}>Создать заметку</Button>
+      <Button disabled={!noteForm?.name} type='submit'>
+        Создать заметку
+      </Button>
     </form>
   );
 };

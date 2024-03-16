@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useRef, useState } from 'react';
+import { ChangeEvent, FC, FormEvent, useRef, useState } from 'react';
 import { Input } from '../UI/Input/Input';
 import { Button } from '../UI/Button/Button';
 import { Editor } from '@tinymce/tinymce-react';
@@ -35,7 +35,8 @@ export const EditNoteModal: FC<IEditNoteProps> = ({ note }) => {
     setNoteForm({ ...noteForm, noteText: tinyEditorRef?.current?.getContent() || '' });
   };
 
-  const handleEditNote = (): void => {
+  const handleEditNote = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
     editNote({
       ...note,
       name: noteForm.name,
@@ -48,7 +49,7 @@ export const EditNoteModal: FC<IEditNoteProps> = ({ note }) => {
   };
 
   return (
-    <form className={styles.modal}>
+    <form className={styles.modal} onSubmit={handleEditNote}>
       <div className={styles.modal__form}>
         <div>
           <Input placeholder='Заголовок' value={noteForm.name} onChange={handleInputChange} />
@@ -63,6 +64,7 @@ export const EditNoteModal: FC<IEditNoteProps> = ({ note }) => {
             setIsLoadingTinyEditor(false);
             return (tinyEditorRef.current = editor);
           }}
+          apiKey='uhism6wemykf6usdjyyz0gmfizgyzfedys7f7xnfwi5jkk3k'
           onChange={handleChangeEditor}
           initialValue={note.noteText}
           init={init}
@@ -73,7 +75,7 @@ export const EditNoteModal: FC<IEditNoteProps> = ({ note }) => {
         disabled={
           (note.name === noteForm.name && note.noteText === noteForm.noteText) || !noteForm?.name
         }
-        onClick={handleEditNote}
+        type='submit'
       >
         Сохранить изменения
       </Button>

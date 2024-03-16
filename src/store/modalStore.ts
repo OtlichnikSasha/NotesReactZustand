@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
@@ -6,12 +5,12 @@ type IModalStore = ModalState & ModalActions;
 
 interface ModalState {
   isOpen: boolean;
-  content: null | ReactNode;
+  content: null | JSX.Element;
   options: IOption | null;
 }
 
 interface ModalActions {
-  handleOpenModal: (content: null | ReactNode, options?: IOption) => void;
+  handleOpenModal: (content: ModalState['content'], options?: IOption) => void;
   closeModal: () => void;
 }
 
